@@ -1,50 +1,78 @@
 <!DOCTYPE html>
-<html lang="pt-br">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Para Você, Meu Amor ❤️</title>
-  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Inter:wght@400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <div class="background">
-    <canvas id="heartsCanvas"></canvas>
-  </div>
-
-  <main class="container">
-    <h1 class="title">Para Valentina 💖</h1>
-    <p class="intro">Hoje não é só o Dia dos Namorados. É o dia de lembrar o quanto eu te amo.</p>
-
-    <button class="heart-button" id="startButton">Toque para começar</button>
-
-    <section class="hidden" id="content">
-      <div class="card">
-        <h2>Nossa história</h2>
-        <ul class="timeline">
-          <li><span>💌</span> Primeiro "Oi"</li>
-          <li><span>💘</span> Primeiro beijo</li>
-          <li><span>💍</span> Nosso sonho juntos</li>
-        </ul>
-      </div>
-
-      <div class="card">
-        <h2>Uma carta para você</h2>
-        <p class="letter" id="letter">Você é o meu motivo de sorrir todos os dias...</p>
-      </div>
-
-      <div class="card">
-        <h2>Surpresa 🎁</h2>
-        <button class="secret-button" id="surpriseBtn">Clique aqui</button>
-        <p class="hidden surprise-message" id="surpriseMessage">💍 Eu te amo mais que qualquer código que já escrevi.</p>
-      </div>
-    </section>
-
-    <footer>
-      Feito com 💖 por <strong>seu dev</strong>
-    </footer>
-  </main>
-
-  <script src="script.js"></script>
-</body>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Feliz Dia Dos Namorados</title>
+    <link rel="icon" type="image/svg+xml" href="./img/heart.svg" />
+    <link rel="stylesheet" href="style/main.css" />
+  </head>
+  <body>
+    <div id="start-modal" style="
+        position:fixed; left:0; top:0; right:0; bottom:0; background:rgba(10,15,20,0.95);
+        display:flex; align-items:center; justify-content:center; z-index:10000; flex-direction:column;
+        color: #fff; font-size:2rem; text-align:center; font-family:inherit;
+        ">
+        <div>
+            <p style="margin-bottom: 2rem;">Clique ou toque para começar a experiência!<br><small style="font-size:1.1rem; color:#ccc">Ative o som 😊</small></p>
+            <button id="start-btn" style="
+            background:#e84797; color:#fff; border:none; padding:1rem 2.5rem;
+            font-size:1.2rem; border-radius:1.5rem; cursor:pointer; box-shadow:0 3px 12px #0007;
+            transition:background 0.2s;
+            ">Começar</button>
+        </div>
+    </div>
+    <div class="bg-space-bg"></div>
+        <div class="star-field" id="star-field" style="display:none;">
+        <div class="layer"></div>
+        <div class="layer"></div>
+        <div class="layer"></div>
+    </div>
+    <div class="container"></div>
+    <div id="universe-overlay" style="display:none;">
+        <div class="universe-content">
+            <h2 id="universe-title"></h2>
+            <p id="universe-message"></p>
+        </div>
+    </div>
+    <!-- Modal Convite para sair sábado -->
+    <div id="modal-convite" class="custom-modal" style="display:none;">
+    <div class="modal-content">
+        <h2>Um convite especial!</h2>
+        <p>Você aceita sair comigo sábado à noite para comemorar esse dia?</p>
+        <button id="btn-sim-sabado">Sim!</button>
+        <button id="btn-nao-sabado">Não</button>
+    </div>
+    </div>
+    <!-- Modal Não aceitou -->
+    <div id="modal-nao-continua" class="custom-modal" style="display:none;">
+    <div class="modal-content">
+        <p>Poxa... sem o seu sim, a surpresa não pode continuar 😢</p>
+        <button id="btn-voltar-inicio">Voltar para o início</button>
+    </div>
+    </div>
+    <!-- Modal Pedido de vida juntos -->
+    <div id="modal-pedido-casamento" class="custom-modal" style="display:none;">
+        <div class="modal-content" style="position:relative;">
+            <h2>Agora uma pergunta ainda mais importante!</h2>
+            <p>Você aceita viver o resto da vida comigo?</p>
+            <button id="btn-sim-vida">Sim, quero!</button>
+            <button id="btn-nao-vida" style="position:relative;">Não 😢</button>
+            <div style="font-size:0.9em; color:#999; margin-top:6px;">
+            Eu quero ver você falar não kkkk
+            </div>
+        </div>
+    </div>
+    <audio id="bg-music" src="music/Next_to_Me_Vintage_Remix.mp3" autoplay loop></audio>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.20.3/TweenMax.min.js"></script>
+    <script src="script/main.js"></script>
+    <script>
+        document.body.addEventListener('click', function playMusicOnce(){
+        var audio = document.getElementById('bg-music');
+        if(audio && audio.paused) audio.play();
+        document.body.removeEventListener('click', playMusicOnce);
+        });
+    </script>
+  </body>
 </html>
