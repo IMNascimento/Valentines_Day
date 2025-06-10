@@ -347,7 +347,7 @@ const animationTimeline = () => {
 
   // Restart Animation on click
   const replyBtn = document.getElementById("replay");
-  replyBtn.addEventListener("click", () => {
+  /*replyBtn.addEventListener("click", () => {
     // Também esconde o overlay, caso esteja visível
     const overlay = document.getElementById('universe-overlay');
     if (overlay) {
@@ -356,7 +356,7 @@ const animationTimeline = () => {
     }
     // Reinicia timeline
     animationTimeline();
-  });
+  });*/
 };
 
 // --------------------------
@@ -374,8 +374,23 @@ const universeSessions = [
   {
     title: "Observo o céu e vejo milhões de estrelas, mas você...",
     message: "você é a única que brilha de verdade no meu universo. Nenhuma delas se compara ao seu brilho único."
+  },
+   {
+    title: "Mais uma noite estrelada",
+    message: "Cada estrela no céu me lembra um motivo para te amar."
+  },
+  {
+    title: "Minha constelação preferida",
+    message: "Entre tantas luzes, você é a que mais brilha no meu coração."
+  },
+  { title: "Todos podem dar presentes, flores...",
+    message: "mas poucos podem te dar isso, programado exclusivamente para você meu amor! 💖"
   }
 ];
+
+let isTyping = false;
+
+// ... universeSessions (mantenha igual) ...
 
 function showUniverseSessions() {
   document.querySelector('.bg-space-bg').style.display = 'block';
@@ -386,22 +401,31 @@ function showUniverseSessions() {
   let idx = 0;
 
   function typeWriter(element, text, speed = 32, cb) {
-    element.innerHTML = "";
+    // Impede animação dupla
+    if (isTyping) return;
+    isTyping = true;
+    element.textContent = "";
+    const chars = Array.from(text);
     let i = 0;
     function type() {
-      if (i < text.length) {
-        element.innerHTML += text[i];
+      if (i < chars.length) {
+        element.textContent += chars[i];
         i++;
         setTimeout(type, speed);
       } else if (cb) {
-        setTimeout(cb, 1300); // Espera um pouco
+        isTyping = false;
+        setTimeout(cb, 1300);
+      } else {
+        isTyping = false;
       }
     }
     type();
   }
 
   function showNextSession() {
-    // Exibe o fundo espacial e as estrelas
+    // Impede sessões sobrepostas
+    if (isTyping) return;
+
     document.querySelector('.bg-space-bg').style.display = 'block';
     document.getElementById('star-field').style.display = 'block';
 
@@ -410,22 +434,19 @@ function showUniverseSessions() {
       overlay.classList.add('hide');
       setTimeout(() => {
         overlay.style.display = 'none';
-        // Esconde o fundo espacial e estrelas
         document.querySelector('.bg-space-bg').style.display = 'none';
         document.getElementById('star-field').style.display = 'none';
-
-        showFinalModals()
+        showFinalModals();
       }, 800);
       return;
     }
 
-    // Exibe o overlay com a próxima mensagem
     overlay.style.display = 'flex';
     overlay.classList.remove('hide');
-    titleEl.innerHTML = "";
-    msgEl.innerHTML = "";
+    titleEl.textContent = "";
+    msgEl.textContent = "";
 
-    // Escreve o título e a mensagem com efeito de máquina de escrever
+    // Anima o título e a mensagem
     typeWriter(titleEl, universeSessions[idx].title, 27, () => {
       typeWriter(msgEl, universeSessions[idx].message, 32, () => {
         setTimeout(() => {
@@ -438,7 +459,6 @@ function showUniverseSessions() {
 
   showNextSession();
 }
-
 
 function showFinalModals() {
   document.querySelector('.bg-space-bg').style.display = 'block';
@@ -492,35 +512,38 @@ function getRandomInt(min, max) {
 }
 
 btnNaoVida.addEventListener('mouseenter', function() {
-  // Limitamos a área pra não sair do card
+  // Pega as dimensões do modal e do botão
   const modalRect = modalContent.getBoundingClientRect();
   const btnRect = btnNaoVida.getBoundingClientRect();
-  const maxX = modalRect.width - btnRect.width - 20;
+
+  // Calcula limites máximos
+  const maxX = modalRect.width - btnRect.width - 10; // 10px de margem
   const maxY = modalRect.height - btnRect.height - 10;
 
   // Gera posições aleatórias dentro do modal
   const randX = getRandomInt(0, maxX);
-  const randY = getRandomInt(60, maxY);
+  const randY = getRandomInt(0, maxY);
 
-  btnNaoVida.style.right = 'auto';
-  btnNaoVida.style.left = randX + 'px';
-  btnNaoVida.style.top = randY + 'px';
-  btnNaoVida.style.bottom = 'auto';
+  // Aplica posição relativa ao modal (importante: modalContent deve ser position: relative)
+  btnNaoVida.style.position = "absolute";
+  btnNaoVida.style.left = randX + "px";
+  btnNaoVida.style.top = randY + "px";
+  btnNaoVida.style.right = "auto";
+  btnNaoVida.style.bottom = "auto";
 
   moveCount++;
-  // Se mover muitas vezes, pode até mudar o texto como trollagem
   if (moveCount > 10) {
     btnNaoVida.innerText = "Desiste vai 😂";
   }
 });
 
-// Opcional: reseta ao fechar
+// Reseta quando fechar modal
 function resetBtnNaoVida() {
-  btnNaoVida.style.right = '32px';
-  btnNaoVida.style.bottom = '32px';
+  btnNaoVida.style.position = '';
   btnNaoVida.style.left = '';
   btnNaoVida.style.top = '';
+  btnNaoVida.style.right = '';
+  btnNaoVida.style.bottom = '';
   btnNaoVida.innerText = "Não 😢";
   moveCount = 0;
 }
-

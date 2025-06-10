@@ -425,6 +425,11 @@ body {
   color: #222;
 }
 
+#modal-pedido-casamento .modal-content {
+  position: relative;
+  overflow: hidden; /* para garantir que o botão não escape visualmente */
+}
+
 #btn-nao-vida {
   position: absolute;
   right: 32px;
