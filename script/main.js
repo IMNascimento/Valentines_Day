@@ -28,7 +28,7 @@ function renderValentine(data) {
   c.innerHTML = `
     <div class="one">
       <h1 class="one">
-        Hey <span id="name">${data.name}</span>
+        Oi <span id="name">${data.name}</span>
       </h1>
       <p class="two" id="greetingText">${data.greetingText}</p>
     </div>
@@ -344,19 +344,6 @@ const animationTimeline = () => {
       "+=1"
     )
     .call(() => setTimeout(showUniverseSessions, 700)); // NOVO: chama sessões do universo
-
-  // Restart Animation on click
-  const replyBtn = document.getElementById("replay");
-  /*replyBtn.addEventListener("click", () => {
-    // Também esconde o overlay, caso esteja visível
-    const overlay = document.getElementById('universe-overlay');
-    if (overlay) {
-      overlay.style.display = 'none';
-      overlay.classList.remove('hide');
-    }
-    // Reinicia timeline
-    animationTimeline();
-  });*/
 };
 
 // --------------------------
@@ -436,7 +423,10 @@ function showUniverseSessions() {
         overlay.style.display = 'none';
         document.querySelector('.bg-space-bg').style.display = 'none';
         document.getElementById('star-field').style.display = 'none';
-        showFinalModals();
+        startHeartMemoryGame(function() {
+            showFinalModals();
+            });
+        //showFinalModals();
       }, 800);
       return;
     }
@@ -507,37 +497,64 @@ let moveCount = 0;
 const btnNaoVida = document.getElementById('btn-nao-vida');
 const modalContent = btnNaoVida.parentElement;
 
+function isMobile() {
+  return window.matchMedia("(pointer: coarse)").matches || window.innerWidth <= 640;
+}
+
 function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-btnNaoVida.addEventListener('mouseenter', function() {
-  // Pega as dimensões do modal e do botão
+function moveBtnNaoVida() {
+  // Limites do botão dentro do modal
   const modalRect = modalContent.getBoundingClientRect();
   const btnRect = btnNaoVida.getBoundingClientRect();
-
-  // Calcula limites máximos
-  const maxX = modalRect.width - btnRect.width - 10; // 10px de margem
+  const maxX = modalRect.width - btnRect.width - 10;
   const maxY = modalRect.height - btnRect.height - 10;
-
-  // Gera posições aleatórias dentro do modal
   const randX = getRandomInt(0, maxX);
   const randY = getRandomInt(0, maxY);
 
-  // Aplica posição relativa ao modal (importante: modalContent deve ser position: relative)
   btnNaoVida.style.position = "absolute";
   btnNaoVida.style.left = randX + "px";
   btnNaoVida.style.top = randY + "px";
   btnNaoVida.style.right = "auto";
   btnNaoVida.style.bottom = "auto";
-
   moveCount++;
   if (moveCount > 10) {
     btnNaoVida.innerText = "Desiste vai 😂";
   }
+}
+
+// --- DESKTOP: foge ao passar o mouse ---
+btnNaoVida.addEventListener('mouseenter', function() {
+  if (!isMobile() && moveCount <= 10) {
+    moveBtnNaoVida();
+  }
 });
 
-// Reseta quando fechar modal
+// --- MOBILE: foge ao clicar até 10 vezes, depois permite fechar ---
+btnNaoVida.addEventListener('click', function(e) {
+  if (isMobile()) {
+    if (moveCount <= 10) {
+      // Cada clique faz fugir
+      moveBtnNaoVida();
+      e.stopPropagation(); // Impede outros cliques
+    } else {
+      // Agora pode "voltar ao início"
+      resetBtnNaoVida();
+      document.getElementById('modal-pedido-casamento').style.display = 'none';
+      location.reload();
+    }
+  } else {
+    // Desktop: ao clicar depois de "Desiste vai", pode voltar ao início
+    if (moveCount > 10) {
+      resetBtnNaoVida();
+      document.getElementById('modal-pedido-casamento').style.display = 'none';
+      location.reload();
+    }
+  }
+});
+
 function resetBtnNaoVida() {
   btnNaoVida.style.position = '';
   btnNaoVida.style.left = '';
@@ -546,4 +563,105 @@ function resetBtnNaoVida() {
   btnNaoVida.style.bottom = '';
   btnNaoVida.innerText = "Não 😢";
   moveCount = 0;
+}
+
+
+const heartMask = [
+  [0, 0, 1, 1, 0, 1, 1, 0, 0],
+  [0, 1, 1, 1, 1, 1, 1, 1, 0],
+  [1, 1, 1, 1, 1, 1, 1, 1, 1],
+  [0, 1, 1, 1, 1, 1, 1, 1, 0],
+  [0, 0, 1, 1, 1, 1, 1, 0, 0],
+  [0, 0, 0, 1, 1, 1, 0, 0, 0],
+  [0, 0, 0, 0, 1, 0, 0, 0, 0]
+];
+
+const memoryPhotos = [
+  'imgs/01.JPEG', 'imgs/02.JPEG', 'imgs/03.JPEG', 'imgs/04.JPEG',
+  'imgs/05.JPEG', 'imgs/06.JPEG', 'imgs/07.JPEG', 'imgs/08.JPEG',
+  'imgs/09.JPEG', 'imgs/10.JPEG', 'imgs/11.JPEG', 'imgs/12.JPEG',
+  'imgs/13.JPEG', 'imgs/14.JPEG', 'imgs/15.JPEG', 'imgs/16.JPEG',
+  'imgs/17.JPEG', 'imgs/18.JPEG'
+];
+
+const cardSize = 64;
+const positions = [];
+for (let row = 0; row < heartMask.length; row++) {
+  for (let col = 0; col < heartMask[row].length; col++) {
+    if (heartMask[row][col]) {
+      positions.push([
+        col * cardSize, // left
+        row * cardSize  // top
+      ]);
+    }
+  }
+}
+// Função embaralhar array
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+}
+
+// Função principal do jogo
+function startHeartMemoryGame(onWin) {
+  document.querySelector('.bg-space-bg').style.display = 'block';
+  document.getElementById('star-field').style.display = 'block';
+  const container = document.getElementById('heart-memory-game');
+  const overlay = document.getElementById('heart-memory-overlay');
+  overlay.style.display = 'flex';
+  container.innerHTML = '';
+
+  // DUPLICA e EMBARALHA as imagens
+  const cards = memoryPhotos.concat(memoryPhotos);
+  shuffle(cards);
+
+  // Define o tamanho do container
+  container.style.width = `${cardSize * 6}px`;
+  container.style.height = `${cardSize * 6}px`;
+
+  // Cria as cartas
+  cards.forEach((src, i) => {
+    const [x, y] = positions[i];
+    const card = document.createElement('div');
+    card.className = 'heart-memory-card';
+    card.style.left = x + 'px';
+    card.style.top = y + 'px';
+    card.innerHTML = `<img src="${src}" alt="carta" draggable="false">`;
+    card.dataset.index = i;
+    card.dataset.photo = src;
+    container.appendChild(card);
+  });
+
+  let flipped = [], lock = false, matchedCount = 0;
+
+  container.onclick = function(e) {
+    const card = e.target.closest('.heart-memory-card');
+    if (!card || lock || card.classList.contains('flipped') || card.classList.contains('matched')) return;
+    card.classList.add('flipped');
+    flipped.push(card);
+
+    if (flipped.length === 2) {
+      lock = true;
+      setTimeout(() => {
+        if (flipped[0].dataset.photo === flipped[1].dataset.photo) {
+          flipped[0].classList.add('matched');
+          flipped[1].classList.add('matched');
+          matchedCount += 2;
+          if (matchedCount === cards.length) {
+            setTimeout(() => {
+              overlay.style.display = 'none';
+              if (onWin) onWin();
+            }, 800);
+          }
+        } else {
+          flipped[0].classList.remove('flipped');
+          flipped[1].classList.remove('flipped');
+        }
+        flipped = [];
+        lock = false;
+      }, 700);
+    }
+  };
 }
