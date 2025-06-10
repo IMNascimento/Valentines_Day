@@ -371,13 +371,19 @@ const universeSessions = [
     message: "Entre tantas luzes, você é a que mais brilha no meu coração."
   },
   { title: "Todos podem dar presentes, flores...",
-    message: "mas poucos podem te dar isso, programado exclusivamente para você meu amor! 💖"
-  }
+    message: "mas poucos poderiam te dar isso meu amor! 💖"
+  },
+  {
+    title: "Rosas morrem, chocolates acabam...",
+    message: "Mas isso aqui vai ficar para você enquanto eu viver e a rede de internet existir!"
+ },
+ {    title: "E para finalizar... Vou te dizer uma coisa...",
+    message: "Será que se eu assinar disney+ essa princesa vem junto haha? 😘"
+ } 
 ];
 
 let isTyping = false;
 
-// ... universeSessions (mantenha igual) ...
 
 function showUniverseSessions() {
   document.querySelector('.bg-space-bg').style.display = 'block';
