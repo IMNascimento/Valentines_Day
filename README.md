@@ -8,7 +8,7 @@
 > **Uma experiência interativa de Dia dos Namorados criada do zero com HTML, CSS e JavaScript puro.**  
 > Responsiva, animada, criativa e cheia de detalhes para quem você ama — ou para mostrar seu talento em front-end no LinkedIn!  
 >  
-> [Clique aqui para testar a experiência!](https://SEU-LINK-DO-DEPLOY)
+> [Demo Online](https://imnascimento.github.io/Valentines_Day/)
 
 ---
 
@@ -52,24 +52,26 @@ Criei este projeto para o Dia dos Namorados como uma forma criativa de **demonst
    cd Valentines_Day
 ```
 
-2. Abra index.html em qualquer navegador moderno.
+2. **Abra `index.html` em qualquer navegador moderno.**
 
 - Não é preciso servidor backend, é tudo estático, mas para requisições ajax utilize o live code do VScode!
 
 - Para personalizar fotos/mensagens, edite o arquivo customize.json.
 
-3. Para compartilhar:
+3. **Para compartilhar:**
 
 - Hospede no GitHub Pages, Vercel, Netlify ou seu servidor favorito.
 
 - Personalize a mensagem, fotos, músicas… e surpreenda alguém!
 
 ## 🖼️ Prints e Destaques
+
 💌 Tela de abertura	
 ---
 💗 Coração Memory Game	
 ---
 😍 Pedido Interativo
+---
 
 
 ## 🌟 Aprendizados e Demonstrações
@@ -90,8 +92,9 @@ Se curtir o projeto, comenta ou compartilha no LinkedIn — e vamos espalhar o a
 [Demo Online](https://imnascimento.github.io/Valentines_Day/)
 
 ## 👤 Autor
-Feito com amor por Igor Nascimento
-Software Engineer | UI/UX | Projetos criativos
+
+Feito com amor por [Igor Nascimento](https://github.com/IMNascimento/)  
+**Software Engineer | UI/UX | Projetos criativos**
 
 ## ⭐ Curtiu?
 Deixe uma estrela ⭐ no repo, ou entre em contato pelo [LinkedIn](https://www.linkedin.com/in/igor-m-nascimento/)!

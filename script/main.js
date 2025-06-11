@@ -3,22 +3,18 @@ const audio = document.getElementById('bg-music');
 if(audio) audio.pause();
 
 document.getElementById('start-btn').addEventListener('click', function() {
-    // Toca música (se existir)
     if(audio) {
       audio.volume = 1;
       audio.play();
     }
-    // Esconde o modal
     document.getElementById('start-modal').style.display = 'none';
-    // Mostra o conteúdo e inicia animação
     document.querySelector('.container').style.display = '';
-    // Agora sim inicia o fetch e as animações
     fetch('customize.json')
       .then(res => res.json())
       .then(data => renderValentine(data));
 });
 
-// Carregar JSON e montar tudo
+
 fetch('customize.json')
   .then(res => res.json())
   .then(data => renderValentine(data));
@@ -75,13 +71,11 @@ function renderValentine(data) {
     </div>
   `;
 
-  // Importante: só roda depois que o HTML foi montado
   animationTimeline();
 }
 
 // Função para animar cada sessão da timeline
 const animationTimeline = () => {
-  // Spit chars that needs to be animated individually
   const textBoxChars = document.getElementsByClassName("hbd-chatbox")[0];
   const hbd = document.getElementsByClassName("wish-hbd")[0];
 
@@ -343,12 +337,10 @@ const animationTimeline = () => {
       },
       "+=1"
     )
-    .call(() => setTimeout(showUniverseSessions, 700)); // NOVO: chama sessões do universo
+    .call(() => setTimeout(showUniverseSessions, 700));
 };
 
-// --------------------------
-// NOVAS SESSÕES DO UNIVERSO!
-// --------------------------
+
 const universeSessions = [
   {
     title: "Você é o meu universo!",
@@ -395,7 +387,6 @@ function showUniverseSessions() {
   let idx = 0;
 
   function typeWriter(element, text, speed = 32, cb) {
-    // Impede animação dupla
     if (isTyping) return;
     isTyping = true;
     element.textContent = "";
@@ -417,13 +408,11 @@ function showUniverseSessions() {
   }
 
   function showNextSession() {
-    // Impede sessões sobrepostas
     if (isTyping) return;
 
     document.querySelector('.bg-space-bg').style.display = 'block';
     document.getElementById('star-field').style.display = 'block';
 
-    // Quando termina as sessões, some tudo!
     if (idx >= universeSessions.length) {
       overlay.classList.add('hide');
       setTimeout(() => {
@@ -433,7 +422,6 @@ function showUniverseSessions() {
         startHeartMemoryGame(function() {
             showFinalModals();
             });
-        //showFinalModals();
       }, 800);
       return;
     }
@@ -443,7 +431,6 @@ function showUniverseSessions() {
     titleEl.textContent = "";
     msgEl.textContent = "";
 
-    // Anima o título e a mensagem
     typeWriter(titleEl, universeSessions[idx].title, 27, () => {
       typeWriter(msgEl, universeSessions[idx].message, 32, () => {
         setTimeout(() => {
@@ -464,7 +451,7 @@ function showFinalModals() {
   const modalNaoContinua = document.getElementById('modal-nao-continua');
   const modalPedido = document.getElementById('modal-pedido-casamento');
 
-  // 1. Mostra convite para sábado
+
   modalConvite.style.display = 'flex';
 
   document.getElementById('btn-sim-sabado').onclick = function() {
@@ -483,19 +470,16 @@ function showFinalModals() {
 
   document.getElementById('btn-voltar-inicio').onclick = function() {
     modalNaoContinua.style.display = 'none';
-    // Recarrega tudo (pode dar replay)
     location.reload();
   };
 
   document.getElementById('btn-sim-vida').onclick = function() {
     modalPedido.style.display = 'none';
-    // Abra o link do WhatsApp (edite para seu número/mensagem)
     window.open("https://wa.me/553288967108?text=Aceito%20viver%20para%20sempre%20com%20você%20%F0%9F%98%8D%F0%9F%92%8C", "_blank");
   };
 
   document.getElementById('btn-nao-vida').onclick = function() {
     modalPedido.style.display = 'none';
-    // Volta pro início/replay
     location.reload();
   };
 }
@@ -513,7 +497,6 @@ function getRandomInt(min, max) {
 }
 
 function moveBtnNaoVida() {
-  // Limites do botão dentro do modal
   const modalRect = modalContent.getBoundingClientRect();
   const btnRect = btnNaoVida.getBoundingClientRect();
   const maxX = modalRect.width - btnRect.width - 10;
@@ -592,13 +575,11 @@ const memoryPhotos = [
 ];
 
 function getResponsiveCardSize(mask, padding = 8) {
-  // padding: margem extra nas bordas para não grudar
   const cols = mask[0].length;
   const rows = mask.length;
   const w = window.innerWidth;
   const h = window.innerHeight;
 
-  // O tamanho máximo que o coração pode ocupar
   const cardW = Math.floor((w - padding * 2) / cols);
   const cardH = Math.floor((h - padding * 2) / rows);
   return Math.min(cardW, cardH);
@@ -608,7 +589,6 @@ function centerHeartGameContainer(cardSize, mask, container) {
   const totalWidth = mask[0].length * cardSize;
   const totalHeight = mask.length * cardSize;
 
-  // Centraliza usando margin
   container.style.width = totalWidth + "px";
   container.style.height = totalHeight + "px";
   container.style.position = "absolute";
@@ -629,7 +609,7 @@ for (let row = 0; row < heartMask.length; row++) {
     }
   }
 }
-// Função embaralhar array
+
 function shuffle(arr) {
   for (let i = arr.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -637,7 +617,7 @@ function shuffle(arr) {
   }
 }
 
-// Função principal do jogo
+
 function startHeartMemoryGame(onWin) {
   document.querySelector('.bg-space-bg').style.display = 'block';
   document.getElementById('star-field').style.display = 'block';
@@ -646,10 +626,10 @@ function startHeartMemoryGame(onWin) {
   overlay.style.display = 'flex';
   container.innerHTML = '';
 
-  // NOVO: cardSize responsivo
+
   const cardSize = getResponsiveCardSize(heartMask, 8);
 
-  // NOVO: calcula posições e centraliza o container
+
   const positions = [];
   for (let row = 0; row < heartMask.length; row++) {
     for (let col = 0; col < heartMask[row].length; col++) {
@@ -662,14 +642,14 @@ function startHeartMemoryGame(onWin) {
     }
   }
 
-  // Centraliza na tela usando função nova
+
   centerHeartGameContainer(cardSize, heartMask, container);
 
-  // DUPLICA e EMBARALHA as imagens
+
   const cards = memoryPhotos.concat(memoryPhotos);
   shuffle(cards);
 
-  // Cria as cartas
+
   cards.forEach((src, i) => {
     const [x, y] = positions[i];
     const card = document.createElement('div');

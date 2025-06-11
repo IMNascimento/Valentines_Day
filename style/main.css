@@ -127,7 +127,6 @@ body {
   width: 80px;
   top: -35px;
   left: 41.5%;
-  /* transform: scale(0.1); */
 }
 
 .baloons img {
@@ -214,7 +213,6 @@ body {
 .wish-hbd {
   font-size: 3em;
   margin: 0;
-  /* text-transform: uppercase; */
 }
 
 .wish h5 {
@@ -347,7 +345,7 @@ body {
   left: 0; top: 0;
   z-index: 1;
   pointer-events: none;
-  display: none; /* Começa escondida */
+  display: none; 
 }
 
 @keyframes sf-fly-by-1 {
@@ -427,7 +425,7 @@ body {
 
 #modal-pedido-casamento .modal-content {
   position: relative;
-  overflow: hidden; /* para garantir que o botão não escape visualmente */
+  overflow: hidden; 
 }
 
 #btn-nao-vida {
@@ -476,7 +474,7 @@ body {
 }
 
 .heart-memory-card:not(.flipped):not(.matched) img {
-  filter: brightness(0) grayscale(1) !important; /* 100% preto, foto some totalmente */
+  filter: brightness(0) grayscale(1) !important; 
 }
 
 /* Cartas abertas/matched — mostra foto */
