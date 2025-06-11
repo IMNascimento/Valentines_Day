@@ -447,10 +447,9 @@ body {
 /* Coração */
 #heart-memory-game {
   position: relative;
-  margin: 32px auto;
-  display: block;
+  margin: 0 auto;
   left: 0; right: 0;
-  /* Largura/altura são setadas pelo JS */
+  display: block;
 }
 .heart-memory-card {
   width: 64px;

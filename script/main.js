@@ -377,7 +377,8 @@ const universeSessions = [
     title: "Rosas morrem, chocolates acabam...",
     message: "Mas isso aqui vai ficar para você enquanto eu viver e a rede de internet existir!"
  },
- {    title: "E para finalizar... Vou te dizer uma coisa...",
+ {    
+    title: "E para finalizar... Vou te dizer uma coisa...",
     message: "Será que se eu assinar disney+ essa princesa vem junto haha? 😘"
  } 
 ];
@@ -590,7 +591,21 @@ const memoryPhotos = [
   'imgs/17.JPEG', 'imgs/18.JPEG'
 ];
 
-const cardSize = 64;
+function getResponsiveCardSize(mask, paddingPx = 12) {
+  // paddingPx é só para dar uma folga nas laterais/topo/baixo
+  const cols = mask[0].length;
+  const rows = mask.length;
+
+  // Pegue o menor lado da tela (para caber tanto em portrait quanto landscape)
+  const w = window.innerWidth - paddingPx * 2;
+  const h = window.innerHeight - paddingPx * 2;
+
+  // Cada carta terá largura máxima possível para caber
+  const sizeW = Math.floor(w / cols);
+  const sizeH = Math.floor(h / rows);
+  return Math.min(sizeW, sizeH);
+}
+
 const positions = [];
 for (let row = 0; row < heartMask.length; row++) {
   for (let col = 0; col < heartMask[row].length; col++) {
@@ -619,6 +634,25 @@ function startHeartMemoryGame(onWin) {
   overlay.style.display = 'flex';
   container.innerHTML = '';
 
+  const cardSize = getResponsiveCardSize(heartMask, 12);
+
+  const positions = [];
+  for (let row = 0; row < heartMask.length; row++) {
+    for (let col = 0; col < heartMask[row].length; col++) {
+      if (heartMask[row][col]) {
+        positions.push([
+          col * cardSize,
+          row * cardSize
+        ]);
+      }
+    }
+  }
+
+  // Define o tamanho do container do coração:
+  container.style.width = (heartMask[0].length * cardSize) + 'px';
+  container.style.height = (heartMask.length * cardSize) + 'px';
+
+
   // DUPLICA e EMBARALHA as imagens
   const cards = memoryPhotos.concat(memoryPhotos);
   shuffle(cards);
@@ -632,6 +666,8 @@ function startHeartMemoryGame(onWin) {
     const [x, y] = positions[i];
     const card = document.createElement('div');
     card.className = 'heart-memory-card';
+    card.style.width = cardSize + 'px';
+    card.style.height = cardSize + 'px';
     card.style.left = x + 'px';
     card.style.top = y + 'px';
     card.innerHTML = `<img src="${src}" alt="carta" draggable="false">`;
