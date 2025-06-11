@@ -591,20 +591,32 @@ const memoryPhotos = [
   'imgs/17.JPEG', 'imgs/18.JPEG'
 ];
 
-function getResponsiveCardSize(mask, paddingPx = 12) {
-  // paddingPx é só para dar uma folga nas laterais/topo/baixo
+function getResponsiveCardSize(mask, padding = 8) {
+  // padding: margem extra nas bordas para não grudar
   const cols = mask[0].length;
   const rows = mask.length;
+  const w = window.innerWidth;
+  const h = window.innerHeight;
 
-  // Pegue o menor lado da tela (para caber tanto em portrait quanto landscape)
-  const w = window.innerWidth - paddingPx * 2;
-  const h = window.innerHeight - paddingPx * 2;
-
-  // Cada carta terá largura máxima possível para caber
-  const sizeW = Math.floor(w / cols);
-  const sizeH = Math.floor(h / rows);
-  return Math.min(sizeW, sizeH);
+  // O tamanho máximo que o coração pode ocupar
+  const cardW = Math.floor((w - padding * 2) / cols);
+  const cardH = Math.floor((h - padding * 2) / rows);
+  return Math.min(cardW, cardH);
 }
+
+function centerHeartGameContainer(cardSize, mask, container) {
+  const totalWidth = mask[0].length * cardSize;
+  const totalHeight = mask.length * cardSize;
+
+  // Centraliza usando margin
+  container.style.width = totalWidth + "px";
+  container.style.height = totalHeight + "px";
+  container.style.position = "absolute";
+  container.style.left = `50%`;
+  container.style.top = `50%`;
+  container.style.transform = `translate(-50%, -50%)`;
+}
+
 
 const positions = [];
 for (let row = 0; row < heartMask.length; row++) {
@@ -634,8 +646,10 @@ function startHeartMemoryGame(onWin) {
   overlay.style.display = 'flex';
   container.innerHTML = '';
 
-  const cardSize = getResponsiveCardSize(heartMask, 12);
+  // NOVO: cardSize responsivo
+  const cardSize = getResponsiveCardSize(heartMask, 8);
 
+  // NOVO: calcula posições e centraliza o container
   const positions = [];
   for (let row = 0; row < heartMask.length; row++) {
     for (let col = 0; col < heartMask[row].length; col++) {
@@ -648,18 +662,12 @@ function startHeartMemoryGame(onWin) {
     }
   }
 
-  // Define o tamanho do container do coração:
-  container.style.width = (heartMask[0].length * cardSize) + 'px';
-  container.style.height = (heartMask.length * cardSize) + 'px';
-
+  // Centraliza na tela usando função nova
+  centerHeartGameContainer(cardSize, heartMask, container);
 
   // DUPLICA e EMBARALHA as imagens
   const cards = memoryPhotos.concat(memoryPhotos);
   shuffle(cards);
-
-  // Define o tamanho do container
-  container.style.width = `${cardSize * 6}px`;
-  container.style.height = `${cardSize * 6}px`;
 
   // Cria as cartas
   cards.forEach((src, i) => {
