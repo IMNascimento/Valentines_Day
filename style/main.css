@@ -460,7 +460,6 @@ body {
   cursor: pointer;
   transition: transform .18s;
   will-change: transform;
-  /* Remove o background padrão */
 }
 
 .heart-memory-card img {
@@ -471,9 +470,9 @@ body {
   transition: filter .2s;
 }
 
-/* Cartas fechadas — preto total */
+
 .heart-memory-card:not(.flipped):not(.matched) {
-  background: #747272 !important; /* preto, troque para #222 ou #333 se quiser mais claro */
+  background: #747272 !important; 
 }
 
 .heart-memory-card:not(.flipped):not(.matched) img {
